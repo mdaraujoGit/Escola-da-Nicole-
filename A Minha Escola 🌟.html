@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)file:///D:/Users/daniel/Downloads/escola-app.html -->
+<html lang="pt"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Minha Escola 🌟</title>
+<link href="./A Minha Escola 🌟_files/css2" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   DESIGN SYSTEM
+═══════════════════════════════════════ */
+:root {
+  --bg:        #0f1923;
+  --surface:   #1a2635;
+  --surface2:  #223045;
+  --border:    #2e4060;
+
+  --pt:  #ff6b9d; /* Português  – rosa */
+  --mat: #ffc947; /* Matemática – ouro */
+  --sci: #4ecdc4; /* Ciências   – turquesa */
+  --his: #a78bfa; /* História   – lavanda */
+  --geo: #f97316; /* Geografia  – laranja */
+
+  --green:  #22d3a0;
+  --red:    #ff5c72;
+  --yellow: #ffd60a;
+  --white:  #f0f4ff;
+  --muted:  #6b8cad;
+
+  --radius: 16px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Stars background ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 45%, rgba(255,255,255,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 85%, rgba(255,255,255,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 70%, rgba(255,255,255,0.25) 0%, transparent 100%);
+  pointer-events: none; z-index:0;
+}
+
+/* ── Layout ── */
+#app { position:relative; z-index:1; min-height:100vh; }
+
+.screen { display:none; padding: 24px 16px 48px; max-width:900px; margin:0 auto; }
+.screen.active { display:block; animation: fadeUp 0.35s ease; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ══════════════════════════════════════
+   HEADER / TOP BAR
+══════════════════════════════════════ */
+.topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:28px; flex-wrap:wrap; gap:12px;
+}
+.topbar-title {
+  font-family:'Titan One', cursive;
+  font-size:1.6rem; color:var(--white);
+  letter-spacing:0.5px;
+}
+.topbar-title span { color: var(--yellow); }
+
+.back-btn {
+  background:var(--surface2); border:2px solid var(--border);
+  color:var(--muted); border-radius:12px;
+  padding:8px 16px; font-family:'Nunito',sans-serif;
+  font-size:0.9rem; font-weight:700; cursor:pointer;
+  transition:all 0.15s;
+}
+.back-btn:hover { color:var(--white); border-color:var(--muted); }
+
+/* ══════════════════════════════════════
+   HOME SCREEN
+══════════════════════════════════════ */
+.home-hero {
+  text-align:center; padding:16px 0 32px;
+}
+.home-hero h1 {
+  font-family:'Titan One', cursive;
+  font-size:clamp(2rem,6vw,3.4rem);
+  line-height:1.1; margin-bottom:8px;
+}
+.home-hero h1 .star { color:var(--yellow); }
+.home-hero p { color:var(--muted); font-size:1rem; font-weight:700; }
+
+/* Stats row */
+.stats-row {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:12px; margin-bottom:32px;
+}
+.stat-card {
+  background:var(--surface); border:2px solid var(--border);
+  border-radius:var(--radius); padding:16px 12px;
+  text-align:center;
+}
+.stat-card .num {
+  font-family:'Titan One',cursive; font-size:2rem;
+  line-height:1; margin-bottom:4px;
+}
+.stat-card .lbl { font-size:0.78rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* Disciplinas grid */
+.section-title {
+  font-size:0.75rem; font-weight:800; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--muted); margin-bottom:14px;
+}
+
+.disc-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:14px; margin-bottom:32px;
+}
+
+.disc-card {
+  background:var(--surface); border:2px solid var(--border);
+  border-radius:var(--radius); padding:20px;
+  cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
+}
+.disc-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:4px;
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.disc-card:hover { transform:translateY(-3px); border-color: var(--accent); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+
+.disc-card[data-disc="pt"]  { --accent:var(--pt); }
+.disc-card[data-disc="mat"] { --accent:var(--mat); }
+.disc-card[data-disc="sci"] { --accent:var(--sci); }
+.disc-card[data-disc="his"] { --accent:var(--his); }
+.disc-card[data-disc="geo"] { --accent:var(--geo); }
+.disc-card::before { background: var(--accent); }
+
+.disc-emoji { font-size:2rem; margin-bottom:8px; }
+.disc-name { font-family:'Titan One',cursive; font-size:1.1rem; color:var(--white); margin-bottom:6px; }
+.disc-meta { font-size:0.82rem; color:var(--muted); font-weight:700; }
+
+.disc-progress-bar {
+  margin-top:10px; height:6px; background:var(--border);
+  border-radius:999px; overflow:hidden;
+}
+.disc-progress-fill { height:100%; border-radius:999px; background:var(--accent); transition:width 0.5s; }
+
+/* Medals row */
+.medals-row { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+.medal {
+  background:var(--surface2); border:2px solid var(--border);
+  border-radius:12px; padding:8px 14px;
+  font-size:0.85rem; font-weight:700; display:flex; align-items:center; gap:6px;
+}
+.medal.earned { border-color:var(--yellow); color:var(--yellow); background:#1f1a00; }
+
+/* ══════════════════════════════════════
+   DISCIPLINE SCREEN
+══════════════════════════════════════ */
+.disc-header {
+  display:flex; align-items:center; gap:14px; margin-bottom:24px;
+}
+.disc-icon-big { font-size:3rem; }
+.disc-h-title { font-family:'Titan One',cursive; font-size:1.8rem; }
+
+.themes-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:12px;
+}
+.theme-card {
+  background:var(--surface); border:2px solid var(--border);
+  border-radius:var(--radius); padding:16px 18px;
+  cursor:pointer; transition:all 0.2s;
+}
+.theme-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+.theme-title { font-weight:800; font-size:0.95rem; margin-bottom:6px; }
+.theme-stats { font-size:0.8rem; color:var(--muted); font-weight:700; }
+.theme-bar { margin-top:8px; height:5px; background:var(--border); border-radius:999px; overflow:hidden; }
+.theme-bar-fill { height:100%; border-radius:999px; background:var(--accent); transition:width 0.5s; }
+
+/* Erros section */
+.errors-box {
+  margin-top:28px; background:var(--surface);
+  border:2px solid var(--border); border-radius:var(--radius); padding:20px;
+}
+.errors-box h3 { font-size:0.75rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+.error-item {
+  border-bottom:1px solid var(--border); padding:10px 0;
+  font-size:0.88rem; font-weight:700; color:var(--white);
+  display:flex; flex-direction:column; gap:4px;
+}
+.error-item:last-child { border-bottom:none; }
+.error-item .err-q { color:var(--muted); font-size:0.8rem; }
+.error-item .err-wrong { color:var(--red); }
+.error-item .err-right { color:var(--green); }
+.no-errors { color:var(--muted); font-size:0.9rem; font-weight:700; }
+
+/* ══════════════════════════════════════
+   QUIZ SCREEN
+══════════════════════════════════════ */
+.quiz-meta {
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.quiz-badge {
+  border-radius:8px; padding:5px 12px;
+  font-size:0.75rem; font-weight:800; letter-spacing:0.5px; text-transform:uppercase;
+  background:var(--accent); color:#000;
+}
+.quiz-counter { font-size:0.85rem; font-weight:700; color:var(--muted); }
+
+.quiz-progress { background:var(--border); border-radius:999px; height:8px; margin-bottom:28px; overflow:hidden; }
+.quiz-progress-fill { height:100%; border-radius:999px; background:var(--accent); transition:width 0.4s; }
+
+.question-card {
+  background:var(--surface); border:2px solid var(--border);
+  border-radius:20px; padding:28px 24px; margin-bottom:20px;
+  transition: border-color 0.3s;
+}
+.question-card.q-correct { border-color:var(--green); background:#0f2820; }
+.question-card.q-wrong   { border-color:var(--red);   background:#1f0d12; animation:shake 0.4s; }
+
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+
+.example-box {
+  background:var(--surface2); border-left:4px solid var(--accent);
+  border-radius:0 10px 10px 0; padding:10px 14px;
+  font-size:0.92rem; font-style:italic; color:var(--white);
+  font-weight:700; margin:12px 0;
+}
+
+.q-text {
+  font-size:1.05rem; font-weight:800; line-height:1.5; color:var(--white);
+  margin-bottom:16px;
+}
+
+.opts { display:grid; gap:8px; }
+.opts.two { grid-template-columns:1fr 1fr; }
+.opts.three { grid-template-columns:1fr 1fr 1fr; }
+
+.opt-btn {
+  background:var(--surface2); border:2px solid var(--border);
+  border-radius:12px; padding:12px 16px;
+  font-family:'Nunito',sans-serif; font-size:0.9rem; font-weight:700;
+  color:var(--white); cursor:pointer; text-align:left;
+  transition:all 0.15s; line-height:1.3;
+}
+.opt-btn:hover:not(:disabled) { border-color:var(--accent); background:rgba(255,255,255,0.05); }
+.opt-btn.opt-ok   { background:#0f2820; border-color:var(--green); color:var(--green); }
+.opt-btn.opt-bad  { background:#1f0d12; border-color:var(--red);   color:var(--red); }
+.opt-btn.opt-rev  { background:#0f2820; border-color:var(--green); }
+.opt-btn:disabled { cursor:default; }
+
+.fill-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+.fill-input {
+  background:var(--surface2); border:2px solid var(--border);
+  border-radius:12px; padding:11px 14px; color:var(--white);
+  font-family:'Nunito',sans-serif; font-size:1rem; font-weight:700;
+  outline:none; min-width:120px; max-width:200px; transition:border-color 0.2s;
+}
+.fill-input:focus { border-color:var(--accent); }
+.fill-input.fi-ok  { border-color:var(--green); background:#0f2820; color:var(--green); }
+.fill-input.fi-bad { border-color:var(--red);   background:#1f0d12; color:var(--red); }
+.fill-input::placeholder { color:var(--muted); }
+
+.check-btn {
+  background:var(--accent); color:#000;
+  border:none; border-radius:12px; padding:11px 22px;
+  font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:800;
+  cursor:pointer; transition:all 0.15s;
+  box-shadow:0 4px 0 rgba(0,0,0,0.3);
+}
+.check-btn:hover:not(:disabled) { transform:translateY(-2px); }
+.check-btn:active { transform:translateY(2px); box-shadow:none; }
+.check-btn:disabled { background:var(--border); color:var(--muted); box-shadow:none; cursor:default; }
+
+.feedback-box {
+  border-radius:12px; padding:12px 16px;
+  font-size:0.9rem; font-weight:700; line-height:1.5;
+  display:none; margin-top:12px;
+}
+.feedback-box.show { display:block; }
+.feedback-box.fb-ok  { background:#0f2820; border:2px solid var(--green); color:#7fffd4; }
+.feedback-box.fb-bad { background:#1f0d12; border:2px solid var(--red);   color:#ffb3bc; }
+
+.next-btn {
+  display:none; margin-top:20px; width:100%;
+  background:var(--accent); color:#000;
+  border:none; border-radius:14px; padding:14px;
+  font-family:'Titan One',cursive; font-size:1.1rem;
+  cursor:pointer; transition:all 0.15s;
+  box-shadow:0 6px 0 rgba(0,0,0,0.3);
+}
+.next-btn:hover { transform:translateY(-2px); box-shadow:0 8px 0 rgba(0,0,0,0.3); }
+.next-btn.show { display:block; animation:fadeUp 0.3s ease; }
+
+/* ══════════════════════════════════════
+   RESULTS SCREEN
+══════════════════════════════════════ */
+.results-center { text-align:center; padding:20px 0 32px; }
+.results-emoji { font-size:5rem; display:block; margin-bottom:12px; animation:pop 0.5s ease; }
+@keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.results-score {
+  font-family:'Titan One',cursive; font-size:4rem; color:var(--yellow);
+  line-height:1; margin-bottom:8px;
+}
+.results-msg { font-size:1.1rem; color:var(--muted); font-weight:700; }
+
+.results-breakdown {
+  background:var(--surface); border:2px solid var(--border);
+  border-radius:var(--radius); padding:20px; margin:24px 0;
+}
+.rb-row { display:flex; justify-content:space-between; align-items:center;
+  padding:8px 0; border-bottom:1px solid var(--border); font-size:0.9rem; font-weight:700; }
+.rb-row:last-child { border-bottom:none; }
+.rb-ok  { color:var(--green); }
+.rb-bad { color:var(--red); }
+
+.new-medals { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:16px 0; }
+.new-medal-badge {
+  background: linear-gradient(135deg, #1f1a00, #3a2e00);
+  border:2px solid var(--yellow); border-radius:12px;
+  padding:10px 18px; font-size:0.9rem; font-weight:800;
+  color:var(--yellow); animation:pop 0.4s ease;
+  display:flex; align-items:center; gap:6px;
+}
+
+.results-actions { display:flex; gap:12px; flex-wrap:wrap; }
+.results-actions button {
+  flex:1; border:none; border-radius:14px; padding:14px;
+  font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800;
+  cursor:pointer; transition:all 0.15s;
+}
+.btn-retry { background:var(--surface2); border:2px solid var(--border); color:var(--white); }
+.btn-retry:hover { border-color:var(--muted); }
+.btn-home  { background:var(--accent); color:#000; }
+.btn-home:hover { transform:translateY(-2px); }
+
+/* hint */
+.hint { font-size:0.78rem; color:var(--muted); margin-top:6px; font-style:italic; }
+
+/* scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:999px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══════════════════════ HOME ══════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="home-hero">
+    <h1>A Minha <span class="star">★</span> Escola</h1>
+    <p>Escolhe uma disciplina e começa a estudar!</p>
+  </div>
+
+  <div class="stats-row" id="home-stats">
+    <div class="stat-card">
+      <div class="num" style="color:var(--yellow)">0</div>
+      <div class="lbl">Sessões</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" style="color:var(--green)">0</div>
+      <div class="lbl">Respostas certas</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" style="color:var(--pt)">0%</div>
+      <div class="lbl">Taxa de acerto</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" style="color:var(--sci)">0</div>
+      <div class="lbl">Medalhas</div>
+    </div>
+  </div>
+
+  <div class="section-title">Disciplinas</div>
+  <div class="disc-grid" id="disc-grid"><div class="disc-card" data-disc="pt" onclick="showDisc(&#39;pt&#39;)" style="--accent:var(--pt)">
+      <div class="disc-emoji">📖</div>
+      <div class="disc-name">Português</div>
+      <div class="disc-meta">6 temas · 23 exercícios</div>
+      <div class="disc-progress-bar"><div class="disc-progress-fill" style="width:0%"></div></div>
+    </div><div class="disc-card" data-disc="mat" onclick="showDisc(&#39;mat&#39;)" style="--accent:var(--mat)">
+      <div class="disc-emoji">🔢</div>
+      <div class="disc-name">Matemática</div>
+      <div class="disc-meta">2 temas · 9 exercícios</div>
+      <div class="disc-progress-bar"><div class="disc-progress-fill" style="width:0%"></div></div>
+    </div><div class="disc-card" data-disc="sci" onclick="showDisc(&#39;sci&#39;)" style="--accent:var(--sci)">
+      <div class="disc-emoji">🔬</div>
+      <div class="disc-name">Ciências</div>
+      <div class="disc-meta">2 temas · 7 exercícios</div>
+      <div class="disc-progress-bar"><div class="disc-progress-fill" style="width:0%"></div></div>
+    </div><div class="disc-card" data-disc="his" onclick="showDisc(&#39;his&#39;)" style="--accent:var(--his)">
+      <div class="disc-emoji">🏛️</div>
+      <div class="disc-name">História</div>
+      <div class="disc-meta">1 temas · 3 exercícios</div>
+      <div class="disc-progress-bar"><div class="disc-progress-fill" style="width:0%"></div></div>
+    </div><div class="disc-card" data-disc="geo" onclick="showDisc(&#39;geo&#39;)" style="--accent:var(--geo)">
+      <div class="disc-emoji">🌍</div>
+      <div class="disc-name">Geografia</div>
+      <div class="disc-meta">1 temas · 4 exercícios</div>
+      <div class="disc-progress-bar"><div class="disc-progress-fill" style="width:0%"></div></div>
+    </div></div>
+
+  <div class="section-title">As Minhas Medalhas</div>
+  <div class="medals-row" id="medals-row"><div class="medal ">⭐ Primeira resposta certa!</div><div class="medal ">🌟 5 seguidas certas!</div><div class="medal ">🏅 10 respostas certas</div><div class="medal ">🥈 25 respostas certas</div><div class="medal ">🥇 50 respostas certas</div><div class="medal ">🌈 Usou 3 disciplinas</div><div class="medal ">🔍 Reviu os erros</div><div class="medal ">💎 Tema perfeito (100%)</div><div class="medal ">📖 Todos os temas de Português</div></div>
+</div>
+
+<!-- ══════════════════════ DISCIPLINE ══════════════════════ -->
+<div class="screen" id="screen-disc">
+  <div class="topbar">
+    <div class="topbar-title" id="disc-topbar-title">Disciplina</div>
+    <button class="back-btn" onclick="showHome()">← Início</button>
+  </div>
+  <div class="themes-grid" id="themes-grid"></div>
+  <div class="errors-box" id="disc-errors"></div>
+</div>
+
+<!-- ══════════════════════ QUIZ ══════════════════════ -->
+<div class="screen" id="screen-quiz">
+  <div class="topbar">
+    <div class="topbar-title" id="quiz-topbar-title">Quiz</div>
+    <button class="back-btn" onclick="showDisc(state.currentDisc)">← Temas</button>
+  </div>
+  <div class="quiz-meta">
+    <span class="quiz-badge" id="quiz-badge">Tema</span>
+    <span class="quiz-counter" id="quiz-counter"></span>
+  </div>
+  <div class="quiz-progress"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+  <div id="quiz-area"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Próxima pergunta →</button>
+</div>
+
+<!-- ══════════════════════ RESULTS ══════════════════════ -->
+<div class="screen" id="screen-results">
+  <div class="results-center">
+    <span class="results-emoji" id="res-emoji"></span>
+    <div class="results-score" id="res-score"></div>
+    <div class="results-msg" id="res-msg"></div>
+  </div>
+  <div class="new-medals" id="new-medals"></div>
+  <div class="results-breakdown" id="results-breakdown"></div>
+  <div class="results-actions">
+    <button class="btn-retry" onclick="retryTheme()">🔄 Tentar novamente</button>
+    <button class="btn-home" onclick="showHome()">🏠 Início</button>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+/* ═════════════════════════════════════════════════════════════
+   DATA — EXERCISE BANK
+   Estrutura: disciplines[id] = { name, emoji, color, themes[] }
+   theme: { id, title, exercises[] }
+   exercise: { id, type:'mc'|'fill', q, example?, opts?, correct, hint?, explanation }
+═════════════════════════════════════════════════════════════ */
+const disciplines = {
+  pt: {
+    name:'Português', emoji:'📖', color:'var(--pt)',
+    themes: [
+      {
+        id:'pt-tipos-frases',
+        title:'Tipo e polaridade das frases',
+        exercises: [
+          { id:'pt-tf-1', type:'mc', q:'Que tipo de frase é esta?', example:'«Fecha a janela, por favor.»',
+            opts:['Declarativa','Imperativa','Interrogativa','Exclamativa'], correct:'Imperativa',
+            explanation:'Uma frase imperativa dá uma ordem ou um pedido. As declarativas afirmam, as interrogativas perguntam e as exclamativas exprimem emoção.' },
+          { id:'pt-tf-2', type:'mc', q:'Qual é a polaridade desta frase?', example:'«O João não foi à escola hoje.»',
+            opts:['Afirmativa','Negativa'], correct:'Negativa',
+            explanation:'A presença de "não" torna a frase negativa. Sem palavras de negação, a frase seria afirmativa.' },
+          { id:'pt-tf-3', type:'mc', q:'Que tipo de frase é esta?', example:'«Que dia lindo hoje!»',
+            opts:['Declarativa','Imperativa','Interrogativa','Exclamativa'], correct:'Exclamativa',
+            explanation:'As frases exclamativas exprimem uma emoção forte (admiração, surpresa, alegria…). Terminam com "!".' },
+          { id:'pt-tf-4', type:'mc', q:'Que tipo de frase é esta?', example:'«Onde está o meu livro?»',
+            opts:['Declarativa','Imperativa','Interrogativa','Exclamativa'], correct:'Interrogativa',
+            explanation:'As frases interrogativas fazem uma pergunta direta. Terminam com "?".' },
+        ]
+      },
+      {
+        id:'pt-frases-sc',
+        title:'Frases simples e complexas',
+        exercises: [
+          { id:'pt-sc-1', type:'mc', q:'Classifica a frase:', example:'«A Marta leu o livro e gostou muito.»',
+            opts:['Simples','Complexa'], correct:'Complexa',
+            explanation:'A frase tem dois verbos conjugados ("leu" e "gostou"), portanto tem duas proposições — é complexa.' },
+          { id:'pt-sc-2', type:'mc', q:'Classifica a frase:', example:'«O cão latiu durante a noite.»',
+            opts:['Simples','Complexa'], correct:'Simples',
+            explanation:'Há um único verbo conjugado ("latiu"), logo uma só proposição — frase simples.' },
+          { id:'pt-sc-3', type:'mc', q:'Uma frase simples tem…',
+            opts:['Dois ou mais verbos conjugados.','Um único verbo conjugado (uma só proposição).','Sempre mais de dez palavras.'], correct:'Um único verbo conjugado (uma só proposição).',
+            explanation:'O critério para ser simples é ter uma só proposição, ou seja, um único verbo conjugado.' },
+        ]
+      },
+      {
+        id:'pt-familia',
+        title:'Família de palavras',
+        exercises: [
+          { id:'pt-fam-1', type:'mc', q:'Qual destas palavras NÃO pertence à família de «mar»?',
+            opts:['Marítimo','Marujo','Amargo','Maresia'], correct:'Amargo',
+            explanation:'"Amargo" tem raiz diferente (amargor). Marítimo, marujo e maresia partilham a raiz MAR- com o mesmo significado base.' },
+          { id:'pt-fam-2', type:'fill', q:'A palavra «feliz» é um adjetivo. Escreve o nome da mesma família (termina em -dade):',
+            correct:['felicidade'], hint:'Termina em -dade',
+            explanation:'"Felicidade" é o nome da família de "feliz". Muitos adjetivos formam nomes com o sufixo -dade (feliz→felicidade, bondoso→bondade).' },
+          { id:'pt-fam-3', type:'mc', q:'Qual é o verbo da família de «corrida»?',
+            opts:['Correr','Corra','Corredor','Corredora'], correct:'Correr',
+            explanation:'"Correr" é o verbo base da família. "Corrida", "corredor" e "corredora" são formas derivadas, mas "correr" é o verbo.' },
+        ]
+      },
+      {
+        id:'pt-classes',
+        title:'Classes de palavras',
+        exercises: [
+          { id:'pt-cl-1', type:'mc', q:'Qual é a classe da palavra «uau» na frase?', example:'«Uau, que espetáculo incrível!»',
+            opts:['Advérbio','Conjunção','Interjeição','Preposição'], correct:'Interjeição',
+            explanation:'Uma interjeição exprime uma emoção ou reação espontânea. "Uau!" é uma interjeição de admiração/surpresa.' },
+          { id:'pt-cl-2', type:'mc', q:'A palavra «de» na frase é uma…', example:'«Preciso de ajuda.»',
+            opts:['Conjunção','Preposição','Pronome','Determinante'], correct:'Preposição',
+            explanation:'As preposições ligam palavras ou grupos de palavras. As mais comuns: de, em, a, por, com, para, sobre.' },
+          { id:'pt-cl-3', type:'mc', q:'Qual a subclasse do nome «matilha»?',
+            opts:['Nome próprio','Nome comum individual','Nome coletivo','Nome abstrato'], correct:'Nome coletivo',
+            explanation:'"Matilha" designa um conjunto de cães — é um nome coletivo. Outros exemplos: alcateia (lobos), cardume (peixes), bando (pássaros).' },
+          { id:'pt-cl-4', type:'mc', q:'Qual é a classe de «rapidamente»?', example:'«Ela correu rapidamente.»',
+            opts:['Adjetivo','Advérbio','Preposição','Determinante'], correct:'Advérbio',
+            explanation:'Os advérbios modificam o verbo, o adjetivo ou outro advérbio. "Rapidamente" modifica "correu" — é um advérbio de modo.' },
+        ]
+      },
+      {
+        id:'pt-verbos',
+        title:'Verbos: tempos e modos',
+        exercises: [
+          { id:'pt-vb-1', type:'mc', q:'Qual o tempo verbal do verbo sublinhado?', example:'«Ontem, a Ana comeu uma maçã.»',
+            opts:['Presente do indicativo','Pretérito perfeito do indicativo','Pretérito imperfeito do indicativo','Futuro do indicativo'],
+            correct:'Pretérito perfeito do indicativo',
+            explanation:'"Comeu" indica uma ação concluída no passado. O advérbio "ontem" confirma: pretérito perfeito do indicativo.' },
+          { id:'pt-vb-2', type:'mc', q:'Qual o tempo verbal?', example:'«Quando chegou, ela já tinha saído.»',
+            opts:['Pretérito perfeito composto','Pretérito mais-que-perfeito composto','Pretérito imperfeito','Futuro do indicativo'],
+            correct:'Pretérito mais-que-perfeito composto',
+            explanation:'"Tinha saído" = verbo auxiliar ter (imperfeito) + particípio passado. Indica uma ação anterior a outra no passado.' },
+          { id:'pt-vb-3', type:'mc', q:'Qual é o modo desta forma verbal?', example:'«Come a sopa toda!»',
+            opts:['Indicativo','Imperativo','Infinitivo','Conjuntivo'],
+            correct:'Imperativo',
+            explanation:'O imperativo exprime ordens, pedidos ou conselhos. "Come!" é uma ordem direta — modo imperativo.' },
+          { id:'pt-vb-4', type:'fill', q:'Conjuga «correr» na 1.ª pessoa do singular do futuro do indicativo (Eu ___):',
+            correct:['correrei','eu correrei'],
+            explanation:'"Correrei" — futuro do indicativo, 1.ª singular. Formação: radical +erei/ás/á/emos/eis/ão.' },
+          { id:'pt-vb-5', type:'mc', q:'Qual destes verbos é IRREGULAR?',
+            opts:['Cantar','Partir','Ser','Comer'], correct:'Ser',
+            explanation:'"Ser" é irregular porque o seu radical muda na conjugação (sou, és, é, somos…). Os regulares mantêm o radical.' },
+        ]
+      },
+      {
+        id:'pt-sintaxe',
+        title:'Funções sintáticas',
+        exercises: [
+          { id:'pt-sx-1', type:'mc', q:'Identifica o sujeito da frase:', example:'«O Pedro e a Beatriz foram ao cinema.»',
+            opts:['Sujeito composto','Sujeito simples','Predicado','Vocativo'],
+            correct:'Sujeito composto',
+            explanation:'"O Pedro e a Beatriz" tem dois núcleos ligados por "e" — é sujeito composto.' },
+          { id:'pt-sx-2', type:'mc', q:'Qual a função da expressão sublinhada?', example:'«A professora deu os livros aos alunos.» (os livros)',
+            opts:['Sujeito','Complemento direto','Complemento indireto','Predicado'],
+            correct:'Complemento direto',
+            explanation:'"Os livros" responde à pergunta "deu o quê?" — é o complemento direto. Não tem preposição obrigatória.' },
+          { id:'pt-sx-3', type:'mc', q:'Qual a função da expressão sublinhada?', example:'«A professora deu os livros aos alunos.» (aos alunos)',
+            opts:['Complemento direto','Complemento indireto','Sujeito','Vocativo'],
+            correct:'Complemento indireto',
+            explanation:'"Aos alunos" responde a "deu a quem?" — é o complemento indireto. Tem preposição obrigatória (a/para).' },
+          { id:'pt-sx-4', type:'mc', q:'Qual a função sintática da palavra sublinhada?', example:'«Ana, vem jantar!» (Ana)',
+            opts:['Sujeito simples','Complemento direto','Vocativo','Predicado'],
+            correct:'Vocativo',
+            explanation:'O vocativo serve para chamar ou interpelar alguém diretamente. É separado por vírgula.' },
+        ]
+      },
+    ]
+  },
+
+  mat: {
+    name:'Matemática', emoji:'🔢', color:'var(--mat)',
+    themes: [
+      {
+        id:'mat-triangulos',
+        title:'Triângulos e ângulos',
+        exercises: [
+          { id:'mat-tri-1', type:'mc', q:'Um triângulo com os 3 lados iguais chama-se…',
+            opts:['Isósceles','Equilátero','Escaleno','Retângulo'], correct:'Equilátero',
+            explanation:'Equilátero = 3 lados iguais e 3 ângulos iguais (60° cada). Isósceles = 2 lados iguais. Escaleno = todos diferentes.' },
+          { id:'mat-tri-2', type:'fill', q:'A soma dos ângulos internos de qualquer triângulo é sempre ___ graus:',
+            correct:['180','180°','180 graus'],
+            explanation:'A soma dos ângulos internos de qualquer triângulo é sempre 180°. É uma propriedade fundamental!' },
+          { id:'mat-tri-3', type:'mc', q:'Dois ângulos de um triângulo são 45° e 85°. Qual é o terceiro?',
+            opts:['40°','50°','60°','70°'], correct:'50°',
+            explanation:'180° − 45° − 85° = 50°. Basta subtrair os dois ângulos conhecidos a 180°.' },
+          { id:'mat-tri-4', type:'mc', q:'Um triângulo com UM ângulo maior que 90° chama-se…',
+            opts:['Acutângulo','Obtusângulo','Retângulo','Equilátero'], correct:'Obtusângulo',
+            explanation:'Obtusângulo: tem um ângulo obtuso (>90°). Acutângulo: todos os ângulos <90°. Retângulo: tem um ângulo reto (=90°).' },
+          { id:'mat-tri-5', type:'mc', q:'Qual destes pode ser os ângulos de um triângulo RETÂNGULO?',
+            opts:['60°, 70°, 50°','90°, 45°, 45°','80°, 80°, 30°','100°, 40°, 40°'], correct:'90°, 45°, 45°',
+            explanation:'Um triângulo retângulo tem exatamente um ângulo de 90°. 90+45+45=180° ✓' },
+        ]
+      },
+      {
+        id:'mat-numeros',
+        title:'Números e operações',
+        exercises: [
+          { id:'mat-num-1', type:'fill', q:'Qual é o mínimo múltiplo comum (mmc) de 4 e 6?',
+            correct:['12'],
+            explanation:'Os múltiplos de 4: 4,8,12,16… Os de 6: 6,12,18… O primeiro comum é 12. mmc(4,6)=12.' },
+          { id:'mat-num-2', type:'mc', q:'Qual é o máximo divisor comum (mdc) de 12 e 18?',
+            opts:['2','3','6','9'], correct:'6',
+            explanation:'Divisores de 12: 1,2,3,4,6,12. Divisores de 18: 1,2,3,6,9,18. O maior comum é 6.' },
+          { id:'mat-num-3', type:'mc', q:'Quanto é 3/4 + 1/2?',
+            opts:['4/6','5/4','4/8','2/3'], correct:'5/4',
+            explanation:'1/2 = 2/4. Portanto 3/4 + 2/4 = 5/4 (fração imprópria = 1 e 1/4).' },
+          { id:'mat-num-4', type:'fill', q:'Calcula: 25% de 80 = ___',
+            correct:['20'],
+            explanation:'25% = 1/4. 80 ÷ 4 = 20. Ou: 80 × 0,25 = 20.' },
+        ]
+      },
+    ]
+  },
+
+  sci: {
+    name:'Ciências', emoji:'🔬', color:'var(--sci)',
+    themes: [
+      {
+        id:'sci-corpo',
+        title:'O corpo humano',
+        exercises: [
+          { id:'sci-ch-1', type:'mc', q:'Qual é a função principal do sistema circulatório?',
+            opts:['Digerir os alimentos','Transportar o sangue e nutrientes pelo corpo','Filtrar o ar que respiramos','Controlar os movimentos'],
+            correct:'Transportar o sangue e nutrientes pelo corpo',
+            explanation:'O sistema circulatório é formado pelo coração, vasos sanguíneos e sangue. Transporta oxigénio, nutrientes e hormônias por todo o corpo.' },
+          { id:'sci-ch-2', type:'mc', q:'Onde ocorre a troca de gases (oxigénio e dióxido de carbono) no sistema respiratório?',
+            opts:['Na traqueia','Nos brônquios','Nos alvéolos','Na laringe'],
+            correct:'Nos alvéolos',
+            explanation:'Os alvéolos são pequenas bolsas nos pulmões onde o O₂ passa para o sangue e o CO₂ sai do sangue para ser expirado.' },
+          { id:'sci-ch-3', type:'fill', q:'O órgão central do sistema circulatório que bombeia o sangue chama-se ___:',
+            correct:['coração'],
+            explanation:'O coração é um músculo que bombeia o sangue por todo o corpo através das artérias e veias.' },
+          { id:'sci-ch-4', type:'mc', q:'Qual é a função do sistema digestivo?',
+            opts:['Produzir energia elétrica para os nervos','Transformar os alimentos em nutrientes que o corpo pode absorver','Filtrar o sangue','Produzir os glóbulos vermelhos'],
+            correct:'Transformar os alimentos em nutrientes que o corpo pode absorver',
+            explanation:'O sistema digestivo decompõe os alimentos em nutrientes (proteínas, hidratos, gorduras, vitaminas) que o corpo consegue absorver e utilizar.' },
+        ]
+      },
+      {
+        id:'sci-plantas',
+        title:'As plantas',
+        exercises: [
+          { id:'sci-pl-1', type:'mc', q:'Como se chama o processo pelo qual as plantas produzem o seu alimento usando luz solar?',
+            opts:['Respiração','Fotossíntese','Germinação','Polinização'],
+            correct:'Fotossíntese',
+            explanation:'Na fotossíntese, as plantas usam luz solar, água e CO₂ para produzir glucose (alimento) e libertam oxigénio. Ocorre nas folhas.' },
+          { id:'sci-pl-2', type:'fill', q:'O pigmento verde das folhas que capta a luz solar chama-se ___:',
+            correct:['clorofila'],
+            explanation:'A clorofila é o pigmento responsável pela cor verde das plantas e é essencial para captar a energia luminosa na fotossíntese.' },
+          { id:'sci-pl-3', type:'mc', q:'Qual a função das raízes?',
+            opts:['Fazer a fotossíntese','Produzir flores','Absorver água e sais minerais do solo','Transportar o pólen'],
+            correct:'Absorver água e sais minerais do solo',
+            explanation:'As raízes fixam a planta ao solo e absorvem água e sais minerais que sobem pelo caule até às folhas.' },
+        ]
+      },
+    ]
+  },
+
+  his: {
+    name:'História', emoji:'🏛️', color:'var(--his)',
+    themes: [
+      {
+        id:'his-portugal',
+        title:'Portugal: origens e fundação',
+        exercises: [
+          { id:'his-pt-1', type:'mc', q:'Em que ano foi fundado o reino de Portugal?',
+            opts:['1143','1415','1096','1179'], correct:'1143',
+            explanation:'Em 1143, pelo Tratado de Zamora, D. Afonso Henriques foi reconhecido como Rei de Portugal pelo reino de Leão. Em 1179, o Papa confirmou oficialmente.' },
+          { id:'his-pt-2', type:'fill', q:'O primeiro rei de Portugal chamava-se D. ___ Henriques:',
+            correct:['afonso','d. afonso','d afonso'],
+            explanation:'D. Afonso Henriques (1109-1185) foi o primeiro rei de Portugal. Ganhou a batalha de S. Mamede (1128) e depois a de Ourique (1139).' },
+          { id:'his-pt-3', type:'mc', q:'Qual foi a batalha em que D. Afonso Henriques venceu os mouros e se proclamou rei?',
+            opts:['Batalha de S. Mamede','Batalha de Ourique','Batalha de Aljubarrota','Batalha do Salado'],
+            correct:'Batalha de Ourique',
+            explanation:'Na Batalha de Ourique (1139), D. Afonso Henriques venceu os mouros e proclamou-se Rei de Portugal.' },
+        ]
+      },
+    ]
+  },
+
+  geo: {
+    name:'Geografia', emoji:'🌍', color:'var(--geo)',
+    themes: [
+      {
+        id:'geo-portugal',
+        title:'Portugal: localização e relevo',
+        exercises: [
+          { id:'geo-pt-1', type:'mc', q:'Em que continente fica Portugal Continental?',
+            opts:['África','Ásia','Europa','América'], correct:'Europa',
+            explanation:'Portugal Continental fica no sudoeste da Europa, na Península Ibérica, fazendo fronteira apenas com Espanha.' },
+          { id:'geo-pt-2', type:'mc', q:'Qual é o ponto mais alto de Portugal Continental?',
+            opts:['Serra da Estrela','Serra do Gerês','Serra de Sintra','Monte da Lua'],
+            correct:'Serra da Estrela',
+            explanation:'A Serra da Estrela tem o ponto mais alto de Portugal Continental: o Torre, com 1993 m de altitude.' },
+          { id:'geo-pt-3', type:'fill', q:'Portugal faz fronteira terrestre apenas com ___ :',
+            correct:['espanha','a espanha'],
+            explanation:'Portugal Continental faz fronteira apenas com Espanha a norte e a leste. A sul e oeste é banhado pelo Oceano Atlântico.' },
+          { id:'geo-pt-4', type:'mc', q:'Como se chamam as regiões autónomas de Portugal?',
+            opts:['Algarve e Alentejo','Açores e Madeira','Madeira e Minho','Açores e Porto Santo'],
+            correct:'Açores e Madeira',
+            explanation:'Portugal tem duas regiões autónomas: os Açores (arquipélago no Atlântico Norte) e a Madeira (arquipélago no Atlântico, perto de África).' },
+        ]
+      },
+    ]
+  },
+};
+
+/* ═════════════════════════════════════════════════════════════
+   STATE & PROGRESS (in-memory, exportable)
+═════════════════════════════════════════════════════════════ */
+// Progress stored in-memory. User can export/import JSON.
+let progress = loadProgress();
+
+function loadProgress() {
+  try {
+    const raw = sessionStorage.getItem('escola_progress');
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return {
+    sessions: 0,
+    totalCorrect: 0,
+    totalAnswered: 0,
+    themes: {},   // themeId -> { correct, total, attempts }
+    errors: [],   // { discId, themeTitle, q, yourAnswer, correct }
+    medals: [],   // medal ids earned
+  };
+}
+
+function saveProgress() {
+  try { sessionStorage.setItem('escola_progress', JSON.stringify(progress)); } catch(e){}
+}
+
+/* ═══════════ MEDALS ════════════════════════════════════════ */
+const ALL_MEDALS = [
+  { id:'first_correct', icon:'⭐', label:'Primeira resposta certa!' },
+  { id:'perfect_5',     icon:'🌟', label:'5 seguidas certas!' },
+  { id:'10_correct',    icon:'🏅', label:'10 respostas certas' },
+  { id:'25_correct',    icon:'🥈', label:'25 respostas certas' },
+  { id:'50_correct',    icon:'🥇', label:'50 respostas certas' },
+  { id:'3_disciplines', icon:'🌈', label:'Usou 3 disciplinas' },
+  { id:'error_review',  icon:'🔍', label:'Reviu os erros' },
+  { id:'perfectTheme',  icon:'💎', label:'Tema perfeito (100%)' },
+  { id:'allPt',         icon:'📖', label:'Todos os temas de Português' },
+];
+
+function checkMedals(sessionResults) {
+  const newMedals = [];
+  const earned = new Set(progress.medals);
+  const discsUsed = new Set(progress.themes ? Object.keys(progress.themes).map(k=>k.split('-')[0]) : []);
+
+  if (!earned.has('first_correct') && progress.totalCorrect >= 1) newMedals.push('first_correct');
+  if (!earned.has('10_correct')    && progress.totalCorrect >= 10)  newMedals.push('10_correct');
+  if (!earned.has('25_correct')    && progress.totalCorrect >= 25)  newMedals.push('25_correct');
+  if (!earned.has('50_correct')    && progress.totalCorrect >= 50)  newMedals.push('50_correct');
+  if (!earned.has('3_disciplines') && discsUsed.size >= 3)          newMedals.push('3_disciplines');
+  if (!earned.has('perfectTheme')  && sessionResults && sessionResults.correct === sessionResults.total && sessionResults.total > 0) newMedals.push('perfectTheme');
+  // 5 seguidas
+  if (!earned.has('perfect_5') && sessionResults && sessionResults.streak >= 5) newMedals.push('perfect_5');
+
+  // all pt themes
+  const ptThemeIds = disciplines.pt.themes.map(t=>t.id);
+  if (!earned.has('allPt') && ptThemeIds.every(id => progress.themes[id] && progress.themes[id].correct > 0)) newMedals.push('allPt');
+
+  newMedals.forEach(m => { if (!earned.has(m)) progress.medals.push(m); });
+  saveProgress();
+  return newMedals;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   NAVIGATION STATE
+═════════════════════════════════════════════════════════════ */
+const state = {
+  currentDisc: null,
+  currentTheme: null,
+  currentExercises: [],
+  currentIndex: 0,
+  sessionCorrect: 0,
+  sessionTotal: 0,
+  sessionLog: [],   // {q, correct, yourAnswer}
+  streak: 0,
+};
+
+/* ═════════════════════════════════════════════════════════════
+   SCREENS
+═════════════════════════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ─── HOME ─────────────────────────────────────────────── */
+function showHome() {
+  renderHomeStats();
+  renderDiscGrid();
+  renderMedals();
+  showScreen('home');
+}
+
+function renderHomeStats() {
+  const pct = progress.totalAnswered > 0
+    ? Math.round(progress.totalCorrect / progress.totalAnswered * 100) : 0;
+  document.getElementById('home-stats').innerHTML = `
+    <div class="stat-card">
+      <div class="num" style="color:var(--yellow)">${progress.sessions}</div>
+      <div class="lbl">Sessões</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" style="color:var(--green)">${progress.totalCorrect}</div>
+      <div class="lbl">Respostas certas</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" style="color:var(--pt)">${pct}%</div>
+      <div class="lbl">Taxa de acerto</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" style="color:var(--sci)">${progress.medals.length}</div>
+      <div class="lbl">Medalhas</div>
+    </div>
+  `;
+}
+
+function renderDiscGrid() {
+  const grid = document.getElementById('disc-grid');
+  grid.innerHTML = Object.entries(disciplines).map(([id, disc]) => {
+    const themeIds = disc.themes.map(t=>t.id);
+    const totalEx = disc.themes.reduce((a,t)=>a+t.exercises.length,0);
+    const doneEx  = themeIds.reduce((a,tid) => {
+      const tp = progress.themes[tid];
+      return a + (tp ? tp.correct : 0);
+    }, 0);
+    const pct = totalEx > 0 ? Math.min(100, Math.round(doneEx/totalEx*100)) : 0;
+    return `<div class="disc-card" data-disc="${id}" onclick="showDisc('${id}')" style="--accent:${disc.color}">
+      <div class="disc-emoji">${disc.emoji}</div>
+      <div class="disc-name">${disc.name}</div>
+      <div class="disc-meta">${disc.themes.length} temas · ${totalEx} exercícios</div>
+      <div class="disc-progress-bar"><div class="disc-progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderMedals() {
+  const earned = new Set(progress.medals);
+  document.getElementById('medals-row').innerHTML = ALL_MEDALS.map(m =>
+    `<div class="medal ${earned.has(m.id)?'earned':''}">${m.icon} ${m.label}</div>`
+  ).join('');
+}
+
+/* ─── DISCIPLINE ─────────────────────────────────────────── */
+function showDisc(discId) {
+  state.currentDisc = discId;
+  const disc = disciplines[discId];
+  document.getElementById('disc-topbar-title').innerHTML =
+    `<span style="color:${disc.color}">${disc.emoji} ${disc.name}</span>`;
+  document.documentElement.style.setProperty('--accent', disc.color);
+
+  // themes
+  const grid = document.getElementById('themes-grid');
+  grid.innerHTML = disc.themes.map(theme => {
+    const tp = progress.themes[theme.id] || { correct:0, total:0, attempts:0 };
+    const total = theme.exercises.length;
+    const pct = total > 0 ? Math.min(100, Math.round(tp.correct/total*100)) : 0;
+    return `<div class="theme-card" style="--accent:${disc.color}" onclick="startTheme('${discId}','${theme.id}')">
+      <div class="theme-title">${theme.title}</div>
+      <div class="theme-stats">${total} exercícios · ${tp.attempts||0} tentativas · ${pct}% acerto</div>
+      <div class="theme-bar"><div class="theme-bar-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+
+  // errors for this disc
+  const discErrors = progress.errors.filter(e => e.discId === discId).slice(-8);
+  const errBox = document.getElementById('disc-errors');
+  if (discErrors.length > 0) {
+    errBox.innerHTML = `<h3>📝 Erros para rever</h3>` +
+      discErrors.map(e=>`<div class="error-item">
+        <div class="err-q">${e.themeTitle} — ${e.q}</div>
+        <div class="err-wrong">✗ ${e.yourAnswer}</div>
+        <div class="err-right">✓ ${e.correct}</div>
+      </div>`).join('');
+  } else {
+    errBox.innerHTML = `<h3>📝 Erros para rever</h3><p class="no-errors">Sem erros registados! 🎉</p>`;
+  }
+
+  showScreen('disc');
+}
+
+/* ─── QUIZ ──────────────────────────────────────────────── */
+function startTheme(discId, themeId) {
+  state.currentDisc = discId;
+  state.currentTheme = themeId;
+  const disc = disciplines[discId];
+  const theme = disc.themes.find(t=>t.id===themeId);
+  state.currentExercises = [...theme.exercises].sort(()=>Math.random()-0.5);
+  state.currentIndex = 0;
+  state.sessionCorrect = 0;
+  state.sessionTotal = theme.exercises.length;
+  state.sessionLog = [];
+  state.streak = 0;
+
+  document.documentElement.style.setProperty('--accent', disc.color);
+  document.getElementById('quiz-topbar-title').textContent = theme.title;
+  document.getElementById('quiz-badge').textContent = disc.name;
+  document.getElementById('quiz-badge').style.background = disc.color;
+
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const ex = state.currentExercises[state.currentIndex];
+  const total = state.currentExercises.length;
+  const idx = state.currentIndex;
+
+  document.getElementById('quiz-counter').textContent = `${idx+1} / ${total}`;
+  document.getElementById('quiz-progress-fill').style.width = `${(idx/total)*100}%`;
+  document.getElementById('next-btn').classList.remove('show');
+
+  let html = `<div class="question-card" id="qcard">`;
+  html += `<div class="q-text">${ex.q}</div>`;
+  if (ex.example) html += `<div class="example-box">${ex.example}</div>`;
+
+  if (ex.type === 'mc') {
+    const cols = ex.opts.length === 2 ? 'two' : ex.opts.length === 3 ? 'three' : '';
+    html += `<div class="opts ${cols}">` + ex.opts.map(opt =>
+      `<button class="opt-btn" onclick="answerMC(this,'${escQ(opt)}','${escQ(ex.correct)}')">${opt}</button>`
+    ).join('') + `</div>`;
+  } else {
+    const acceptList = JSON.stringify(ex.correct).replace(/"/g,"'");
+    html += `<div class="fill-row">
+      <input class="fill-input" id="fill-inp" placeholder="A tua resposta…" onkeydown="if(event.key==='Enter')answerFill(${acceptList})"/>
+      <button class="check-btn" onclick="answerFill(${acceptList})">Verificar ✓</button>
+    </div>`;
+    if (ex.hint) html += `<p class="hint">💡 ${ex.hint}</p>`;
+  }
+
+  html += `<div class="feedback-box" id="qfb"></div>`;
+  html += `</div>`;
+
+  document.getElementById('quiz-area').innerHTML = html;
+}
+
+function escQ(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+function answerMC(btn, chosen, correct) {
+  const qcard = document.getElementById('qcard');
+  if (qcard.classList.contains('q-correct') || qcard.classList.contains('q-wrong')) return;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const ok = chosen === correct;
+  btn.classList.add(ok ? 'opt-ok' : 'opt-bad');
+  if (!ok) document.querySelectorAll('.opt-btn').forEach(b => {
+    if (b.textContent.trim() === correct) b.classList.add('opt-rev');
+  });
+  recordAnswer(ok, chosen, correct);
+}
+
+function answerFill(accepts) {
+  const inp = document.getElementById('fill-inp');
+  if (!inp || inp.disabled) return;
+  const val = inp.value.trim().toLowerCase();
+  const ok = accepts.map(a=>a.toLowerCase()).includes(val);
+  inp.disabled = true;
+  document.querySelectorAll('.check-btn').forEach(b=>b.disabled=true);
+  inp.classList.add(ok ? 'fi-ok' : 'fi-bad');
+  recordAnswer(ok, inp.value.trim(), accepts[0]);
+}
+
+function recordAnswer(ok, yourAnswer, correct) {
+  const ex = state.currentExercises[state.currentIndex];
+  const disc = disciplines[state.currentDisc];
+  const theme = disc.themes.find(t=>t.id===state.currentTheme);
+  const qcard = document.getElementById('qcard');
+  const fb = document.getElementById('qfb');
+
+  qcard.classList.add(ok ? 'q-correct' : 'q-wrong');
+  fb.className = 'feedback-box show ' + (ok ? 'fb-ok' : 'fb-bad');
+  fb.innerHTML = (ok ? '✅ ' : '❌ ') + ex.explanation;
+
+  state.sessionLog.push({ q: ex.q, correct: ok, yourAnswer, correctAnswer: correct });
+  if (ok) { state.sessionCorrect++; state.streak++; }
+  else { state.streak = 0; }
+
+  // record error
+  if (!ok) {
+    progress.errors.push({ discId: state.currentDisc, themeTitle: theme.title, q: ex.q, yourAnswer, correct });
+    if (progress.errors.length > 50) progress.errors.shift();
+  }
+
+  // update theme progress
+  if (!progress.themes[state.currentTheme]) progress.themes[state.currentTheme] = { correct:0, total:0, attempts:0 };
+  if (ok) progress.themes[state.currentTheme].correct++;
+  progress.themes[state.currentTheme].total++;
+  progress.totalCorrect += ok ? 1 : 0;
+  progress.totalAnswered++;
+  saveProgress();
+
+  document.getElementById('next-btn').classList.add('show');
+  const isLast = state.currentIndex === state.currentExercises.length - 1;
+  document.getElementById('next-btn').textContent = isLast ? 'Ver resultados 🏁' : 'Próxima pergunta →';
+}
+
+function nextQuestion() {
+  state.currentIndex++;
+  if (state.currentIndex >= state.currentExercises.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ─── RESULTS ───────────────────────────────────────────── */
+function showResults() {
+  const correct = state.sessionCorrect;
+  const total   = state.sessionTotal;
+  const pct     = Math.round(correct / total * 100);
+
+  progress.sessions++;
+  progress.themes[state.currentTheme].attempts = (progress.themes[state.currentTheme].attempts||0)+1;
+  saveProgress();
+
+  // emoji + msg
+  let emoji, msg;
+  if (pct === 100)      { emoji='🏆'; msg='Perfeito! Incrível! Sabes tudo! 🌟'; }
+  else if (pct >= 80)   { emoji='🎉'; msg='Muito bem! Quase perfeito!'; }
+  else if (pct >= 60)   { emoji='👍'; msg='Bom trabalho! Continua a praticar!'; }
+  else if (pct >= 40)   { emoji='💪'; msg='Não desistas! Revê os erros e tenta novamente.'; }
+  else                  { emoji='📚'; msg='Precisas de mais prática — mas estás no bom caminho!'; }
+
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-score').textContent = `${correct}/${total}`;
+  document.getElementById('res-msg').textContent = msg;
+
+  // breakdown
+  const bd = document.getElementById('results-breakdown');
+  bd.innerHTML = state.sessionLog.map(entry =>
+    `<div class="rb-row">
+       <span style="flex:1;color:var(--muted);font-size:0.82rem">${entry.q.substring(0,55)}…</span>
+       ${entry.correct
+         ? `<span class="rb-ok">✅ ${entry.correctAnswer}</span>`
+         : `<span class="rb-bad">✗ ${entry.yourAnswer} → ✓ ${entry.correctAnswer}</span>`}
+     </div>`
+  ).join('');
+
+  // medals
+  const newMedals = checkMedals({ correct, total, streak: state.streak });
+  const nm = document.getElementById('new-medals');
+  nm.innerHTML = newMedals.map(mid => {
+    const m = ALL_MEDALS.find(x=>x.id===mid);
+    return m ? `<div class="new-medal-badge">${m.icon} ${m.label}</div>` : '';
+  }).join('');
+
+  showScreen('results');
+}
+
+function retryTheme() { startTheme(state.currentDisc, state.currentTheme); }
+
+/* ─── INIT ──────────────────────────────────────────────── */
+showHome();
+</script>
+
+
+</body></html>
